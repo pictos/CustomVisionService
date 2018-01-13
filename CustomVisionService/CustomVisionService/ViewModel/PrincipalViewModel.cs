@@ -32,9 +32,11 @@ namespace CustomVisionService.ViewModel
         }
 
         Stream _imagemStream;
-        private readonly string key = "ae338ccf095f437bb7b0c1eac7da0354";
-        private readonly string url = "https://southcentralus.api.cognitive.microsoft.com/customvision/v1.1/Prediction/93202177-b70b-4ee0-9603-069bf8f6f4b9/url";
-        private readonly string urlStream = "https://southcentralus.api.cognitive.microsoft.com/customvision/v1.1/Prediction/93202177-b70b-4ee0-9603-069bf8f6f4b9/image";
+        private readonly string key = ""; //Chave do serviço
+
+        //A url muda para cada tipo de consulta, por URL ou por arquivo de foto
+        private readonly string url = ""; // Sua URL do serviço
+        private readonly string urlStream = ""; 
 
         public Command ServicoCommand { get; }
         public Command TirarCommand { get; }
