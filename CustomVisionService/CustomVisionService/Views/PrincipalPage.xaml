@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CustomVisionService.Views.PrincipalPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Button Text="Tirar foto" Command="{Binding TirarCommand}"/>
+                <Button Text="Abrir foto" Command="{Binding AbrirCommand}"/>
+            </StackLayout>
+            
+            <Entry Text="{Binding Url}" Placeholder="Coloque a URL da foto aqui"/>
+            <Image Source="{Binding Url}" HeightRequest="150"/>
+            
+            <Button Text="Serviço Url" Command="{Binding ServicoCommand}"/>
+            <Button Text="Serviço Stream" Command="{Binding StreamCommand}"/>
+
+            <ListView ItemsSource="{Binding MyPrediction}" SeparatorColor="Azure">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding Tag}" Detail="{Binding Probability, StringFormat='Probablidade: {0:F3}'}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

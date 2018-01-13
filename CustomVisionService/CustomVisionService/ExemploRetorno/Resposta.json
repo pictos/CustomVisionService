@@ -1,0 +1,19 @@
+﻿{
+  "Id": "d002f623-c885-4b2b-8bf2-363763a65183",
+  "Project": "93202177-b70b-4ee0-9603-069bf8f6f4b9",
+  "Iteration": "651c4f4d-15c7-40ce-a0a1-0fb7e5422ae0",
+  "Created": "2017-12-26T05:29:04.615507Z",
+
+  "Predictions": [
+    {
+      "TagId": "54e9b6d0-e5d4-4eb7-b3ed-eaa82b3a7bf7",
+      "Tag": "goiabas",
+      "Probability": 0.983279
+    },
+    {
+      "TagId": "59b61efd-7643-4b03-8a0f-d4ad72aafb7b",
+      "Tag": "melancia",
+      "Probability": 0.00500265462
+    }
+  ]
+}
