@@ -1,9 +1,6 @@
 ﻿using CustomVisionService.Model;
 using CustomVisionService.Services;
-using System.Linq;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using System;
@@ -28,11 +25,16 @@ namespace CustomVisionService.ViewModel
         public bool IsBusy
         {
             get { return _isBusy; }
-            set { _isBusy = value; OnPropertyChanged(); TirarCommand.ChangeCanExecute();AbrirCommand.ChangeCanExecute(); }
+            set { _isBusy = value; OnPropertyChanged();
+                TirarCommand.ChangeCanExecute();
+                AbrirCommand.ChangeCanExecute();
+                StreamCommand.ChangeCanExecute();
+                ServicoCommand.ChangeCanExecute();
+            }
         }
 
         Stream _imagemStream;
-        private readonly string key = ""; //Chave do serviço
+        private readonly string key = ""; //Chave do seriviço
 
         //A url muda para cada tipo de consulta, por URL ou por arquivo de foto
         private readonly string url = ""; // Sua URL do serviço
@@ -48,8 +50,8 @@ namespace CustomVisionService.ViewModel
 
         public PrincipalViewModel()
         {
-            ServicoCommand = new Command(ExecuteServicoCommand);
-            StreamCommand = new Command(ExecuteStreamCommand);
+            ServicoCommand = new Command(ExecuteServicoCommand,()=>!IsBusy);
+            StreamCommand = new Command(async () => await ExecuteStreamCommand(), ()=>!IsBusy);
             TirarCommand = new Command(async () => await ExecuteTirarCommand(), () => !IsBusy);
             AbrirCommand = new Command(async () => await ExecuteAbrirCommand(), () => !IsBusy);
         
@@ -57,20 +59,63 @@ namespace CustomVisionService.ViewModel
             MyPrediction = new ObservableCollection<Prediction>();
         }
 
-        async void ExecuteStreamCommand()
+        async Task ExecuteStreamCommand()
         {
-            Servico = new CVService(key, urlStream);
-            Model = await Servico.CVSStreamAsync(_imagemStream);
-            ExibirLista(Model);
+
+            if (!IsBusy)
+            {
+                try
+                {
+                    IsBusy = true;
+                    Servico = new CVService(key, urlStream);
+                    if (_imagemStream == null)
+                        await DisplayAlert("Erro", "Nenhuma imagem selecionada", "Ok");
+                    Model = await Servico.CVSStreamAsync(_imagemStream);
+                    ExibirLista(Model);
+
+                }
+                catch (System.Exception ex)
+                {
+
+                    await DisplayAlert("Erro!", $"Erro:{ex.Message}", "Ok");
+                }
+
+                finally
+                {
+                    IsBusy = false;
+                }
+            }
+
+            return;
         }
 
         async Task ExecuteAbrirCommand()
         {
-            await CrossMedia.Current.Initialize();
-            var arquivoFoto = await CrossMedia.Current.PickPhotoAsync();
+            if (!IsBusy)
+            {
+                try
+                {
+                    IsBusy = true;
+                    await CrossMedia.Current.Initialize();
+                    var arquivoFoto = await CrossMedia.Current.PickPhotoAsync();
 
-            _imagemStream = arquivoFoto?.GetStream();
-            Url = arquivoFoto?.Path;
+                    _imagemStream = arquivoFoto?.GetStream();
+                    Url = arquivoFoto?.Path;
+
+                }
+                catch (System.Exception ex)
+                {
+
+                    await DisplayAlert("Erro!", $"Erro:{ex.Message}", "Ok");
+                }
+
+                finally
+                {
+                    IsBusy = false;
+                }
+            }
+
+            return;
         }
 
         async Task ExecuteTirarCommand()
@@ -107,10 +152,32 @@ namespace CustomVisionService.ViewModel
 
         async void ExecuteServicoCommand()
         {
-            Servico = new CVService(key, url);
-            Model = await Servico.CVSUrlAsync(Url);
 
-            ExibirLista(Model);
+
+            if (!IsBusy)
+            {
+                try
+                {
+                    IsBusy = true;
+                    Servico = new CVService(key, url);
+                    Model = await Servico.CVSUrlAsync(Url);
+                    ExibirLista(Model);
+
+                }
+                catch (System.Exception ex)
+                {
+
+                    await DisplayAlert("Erro!", $"Erro:{ex.Message}", "Ok");
+                }
+
+                finally
+                {
+                    IsBusy = false;
+                }
+            }
+
+            return;
+          
         }
 
         private void ExibirLista(CVSModel Model)
@@ -129,3 +196,4 @@ namespace CustomVisionService.ViewModel
         }
     }
 }
+

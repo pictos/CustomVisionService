@@ -14,6 +14,8 @@
             
             <Button Text="Serviço Url" Command="{Binding ServicoCommand}"/>
             <Button Text="Serviço Stream" Command="{Binding StreamCommand}"/>
+            <ActivityIndicator IsEnabled="{Binding IsBusy}" IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"/>
 
             <ListView ItemsSource="{Binding MyPrediction}" SeparatorColor="Azure">
                 <ListView.ItemTemplate>
